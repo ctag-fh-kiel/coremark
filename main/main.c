@@ -1,4 +1,4 @@
-/* Hello World Example
+/* Coremark wrapper
 
    This example code is in the Public Domain (or CC0 licensed, at your option.)
 
@@ -11,12 +11,22 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
+#include "esp_task_wdt.h"
+
+
 
 int main(int argc, char *argv[]);
 
-void app_main()
+void main_task(void *p)
 {
     char *param[] = {"0", "0", "0x66", "2500"};		// These parameters are not taken into account
 
     main(4,param);
+
+    vTaskDelete(NULL);
+}
+
+void app_main(void)
+{
+    xTaskCreate(main_task, "main", 8192, NULL, 6, NULL);
 }

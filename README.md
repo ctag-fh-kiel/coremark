@@ -8,43 +8,46 @@ See [EEMBC](https://github.com/eembc/coremark) for more details.
 ## Current results
 Between parenthesis result with -O0 for comparaison, otherwise -O3 is used to compile Coremark.
 
-| Processor       | Freq (MHz) | CoreMark     | CoreMark/MHz |
-| :-------------- | :--------- | :----------- | ------------ |
-| ESP8266         | 80         | 191          | 2.375        |
-| ESP32 (2 cores) | 160        | 665.9        | **4.16**     |
-|                 | 240        | **999.2**    | **4.16**     |
-| ESP32 (1 core)  | 80         | 165.9        | 2.07         |
-|                 | 160        | 330.9 (78.1) | 2.07 (0.49)  |
-|                 | 240        | 494.6        | 2.06         |
-| ESP32 S2        | 80         | 157,5        | 1.97         |
-|                 | 160        | 315.2        | 1.97         |
-|                 | 240        | 472.8        | 1.97         |
-| ...             | ...        | ...          | ...          |
+| Processor          | Freq (MHz) | CoreMark     | CoreMark/MHz |
+|:-------------------|:-----------|:-------------|--------------|
+| ESP8266            | 80         | 191          | 2.375        |
+| ESP32 (2 cores)    | 160        | 665.9        | **4.16**     |
+|                    | 240        | **999.2**    | **4.16**     |
+| ESP32 (1 core)     | 80         | 165.9        | 2.07         |
+|                    | 160        | 330.9 (78.1) | 2.07 (0.49)  |
+|                    | 240        | 494.6        | 2.06         |
+| ESP32 S2           | 80         | 157,5        | 1.97         |
+|                    | 160        | 315.2        | 1.97         |
+|                    | 240        | 472.8        | 1.97         |
+| ESP32 P4 (1 core)  | 360        |              |              |
+| ESP32 P4 (2 cores) | 360        | 2100.8       | 5.84         |
+| ...                | ...        | ...          | ...          |
 
 (larger numbers are better)
 
 ## How to install
-See [Espressif](https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/get-started/index.html#setup-toolchain) for latest procedure
+See [Espressif](https://docs.espressif.com/projects/esp-idf/en/v4.0/get-started/index.html#installation-step-by-step) for latest procedure
 
-### Prerequisite (on Ubuntu)
+### Prerequisite (on Ubuntu 18.04)
 ```
-sudo apt install gcc git wget make libncurses-dev flex bison gperf python python-serial screen
+sudo apt-get install git wget flex bison gperf python3 python3-pip python3-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util
+```
+You may have to delete ~/.espressif if you have an old installation
+
+Remove python2.x if you can and type:
+
+```
+sudo update-alternatives --set python /usr/bin/python3
 ```
 
-### Get compiler
-```
-cd 
-wget https://dl.espressif.com/dl/xtensa-lx106-elf-linux64-1.22.0-100-ge567ec7-5.2.0.tar.gz
-tar xvzf xtensa-lx106-elf-linux64-1.22.0-100-ge567ec7-5.2.0.tar.gz
-```
-
-### Get SDK
+### Get SDK/IDF (latest)
 ```
 cd
 mkdir git
-git clone --recursive --branch release/v3.3 https://github.com/espressif/ESP8266_RTOS_SDK.git
-cd ESP8266_RTOS_SDK 
-python -m pip install --user -r ./requirements.txt
+git clone --recursive https://github.com/espressif/esp-idf.git
+cd esp-idf
+./install.sh
+. ./export.sh
 cd ..
 ```
 
@@ -52,45 +55,50 @@ cd ..
 ```
 cd 
 cd git
-git clone https://github.com/ochrin/coremark.git 
+git clone --branch esp32 https://github.com/ochrin/coremark.git 
 ```
 
 ## How to build
 ```
-export IDF_PATH=~/git/ESP8266_RTOS_SDK
-export PATH=~/xtensa-lx106-elf/bin:$PATH
-make all
+idf.py set-target esp32
+idf.py build
 ```
 ## How to configure CoreMark (optional)
 ```
-make menuconfig
+idf.py menuconfig
 ```
 You may adjust CoreMark settings in _CoreMark configuration_ else simply exit.  
-Number of iterations should not be too long to avoid watchdog error.  
 You will need to build afterward.
 
 ## How to run
 ```
-make flash; screen /dev/ttyUSB0 115200
+idf.py -p /dev/ttyUSB0 flash; screen /dev/ttyUSB0 115200
 ```
 Ctrl-a + k then y to exit screen
 
-## Result you should get with default settings
+You have to wait about 20 to 30s to get the results.
+
+## Result you should get with 2 core settings (numbers may change)
 ```
 2K performance run parameters for coremark.
 CoreMark Size    : 666
-Total ticks      : 1309
-Total time (secs): 13.090000
-Iterations/Sec   : 190.985485
-Iterations       : 2500
-Compiler version : GCC5.2.0
+Total ticks      : 19040000
+Total time (secs): 19.040000
+Iterations/Sec   : 2100.840336
+Iterations       : 40000
+Compiler version : GCC14.2.0
 Compiler flags   : -O3
-Memory location  : STACK
+Parallel FreeRTOS : 2
+Memory location  : DRAM
 seedcrc          : 0xe9f5
 [0]crclist       : 0xe714
+[1]crclist       : 0xe714
 [0]crcmatrix     : 0x1fd7
+[1]crcmatrix     : 0x1fd7
 [0]crcstate      : 0x8e3a
-[0]crcfinal      : 0x5275
+[1]crcstate      : 0x8e3a
+[0]crcfinal      : 0x382f
+[1]crcfinal      : 0x382f
 Correct operation validated. See README.md for run and reporting rules.
-CoreMark 1.0 : 190.985485 / GCC5.2.0 -O3 / STACK
+CoreMark 1.0 : 2100.84 :: 5.84 / MHz at 360 MHz core frequency :: compiler GCC14.2.0 -O3 :: memory location DRAM :: cores used: 2 :: thread method: FreeRTOS
 ```
