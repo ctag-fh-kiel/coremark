@@ -6,22 +6,22 @@ Starts a FreeRTOS task to run CoreMark benchmark.
 See [EEMBC](https://github.com/eembc/coremark) for more details.
 
 ## Current results
-Between parenthesis result with -O0 for comparaison, otherwise -O3 is used to compile Coremark.
+Between parenthesis result with -O0 for comparison, otherwise -O3 is used to compile Coremark.
 
-| Processor          | Freq (MHz) | CoreMark     | CoreMark/MHz |
-|:-------------------|:-----------|:-------------|--------------|
-| ESP8266            | 80         | 191          | 2.375        |
-| ESP32 (2 cores)    | 160        | 665.9        | **4.16**     |
-|                    | 240        | **999.2**    | **4.16**     |
-| ESP32 (1 core)     | 80         | 165.9        | 2.07         |
-|                    | 160        | 330.9 (78.1) | 2.07 (0.49)  |
-|                    | 240        | 494.6        | 2.06         |
-| ESP32 S2           | 80         | 157,5        | 1.97         |
-|                    | 160        | 315.2        | 1.97         |
-|                    | 240        | 472.8        | 1.97         |
-| ESP32 P4 (1 core)  | 360        |              |              |
-| ESP32 P4 (2 cores) | 360        | 2100.8       | 5.84         |
-| ...                | ...        | ...          | ...          |
+| Processor          | Freq (MHz) | CoreMark           | CoreMark/MHz |
+|:-------------------|:-----------|:-------------------|--------------|
+| ESP8266            | 80         | 191                | 2.375        |
+| ESP32 (2 cores)    | 160        | 665.9              | **4.16**     |
+|                    | 240        | **999.2**          | **4.16**     |
+| ESP32 (1 core)     | 80         | 165.9              | 2.07         |
+|                    | 160        | 330.9 (78.1)       | 2.07 (0.49)  |
+|                    | 240        | 494.6              | 2.06         |
+| ESP32 S2           | 80         | 157,5              | 1.97         |
+|                    | 160        | 315.2              | 1.97         |
+|                    | 240        | 472.8              | 1.97         |
+| ESP32 P4 (1 core)  | 360        | 1089.3             | 3.03         |
+| ESP32 P4 (2 cores) | 360        | 2172.7             | 6.04         |
+| ...                | ...        | ...                | ...          |
 
 (larger numbers are better)
 
@@ -82,9 +82,9 @@ You have to wait about 20 to 30s to get the results.
 ```
 2K performance run parameters for coremark.
 CoreMark Size    : 666
-Total ticks      : 19040000
-Total time (secs): 19.040000
-Iterations/Sec   : 2100.840336
+Total ticks      : 18410000
+Total time (secs): 18.410000
+Iterations/Sec   : 2172.732211
 Iterations       : 40000
 Compiler version : GCC14.2.0
 Compiler flags   : -O3
@@ -100,5 +100,5 @@ seedcrc          : 0xe9f5
 [0]crcfinal      : 0x382f
 [1]crcfinal      : 0x382f
 Correct operation validated. See README.md for run and reporting rules.
-CoreMark 1.0 : 2100.84 :: 5.84 / MHz at 360 MHz core frequency :: compiler GCC14.2.0 -O3 :: memory location DRAM :: cores used: 2 :: thread method: FreeRTOS
+CoreMark 1.0 : 2172.73 :: 6.04 / MHz at 360 MHz core frequency :: compiler GCC14.2.0 -O3 :: memory location DRAM :: cores used: 2 :: thread method: FreeRTOS
 ```
