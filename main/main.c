@@ -13,6 +13,8 @@
 #include "esp_spi_flash.h"
 #include "esp_task_wdt.h"
 
+
+
 int main(int argc, char *argv[]);
 
 void main_task(void *p)

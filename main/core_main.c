@@ -33,6 +33,21 @@ Original Author: Shay Gal-on
 	Returns:
 	NULL.
 */
+// In IDF v5.x, there is a common CPU frequency option for all targets
+#if defined(CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ)
+#define CPU_FREQ CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ
+
+// In IDF v4.x, CPU frequency options were target-specific
+#elif defined(CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ)
+#define CPU_FREQ CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ
+#elif defined(CONFIG_ESP32S2_DEFAULT_CPU_FREQ_MHZ)
+#define CPU_FREQ CONFIG_ESP32S2_DEFAULT_CPU_FREQ_MHZ
+#elif defined(CONFIG_ESP32S3_DEFAULT_CPU_FREQ_MHZ)
+#define CPU_FREQ CONFIG_ESP32S3_DEFAULT_CPU_FREQ_MHZ
+#elif defined(CONFIG_ESP32C3_DEFAULT_CPU_FREQ_MHZ)
+#define CPU_FREQ CONFIG_ESP32C3_DEFAULT_CPU_FREQ_MHZ
+#endif
+
 static ee_u16 list_known_crc[]   =      {(ee_u16)0xd4b0,(ee_u16)0x3340,(ee_u16)0x6a79,(ee_u16)0xe714,(ee_u16)0xe3c1};
 static ee_u16 matrix_known_crc[] =      {(ee_u16)0xbe52,(ee_u16)0x1199,(ee_u16)0x5608,(ee_u16)0x1fd7,(ee_u16)0x0747};
 static ee_u16 state_known_crc[]  =      {(ee_u16)0x5e47,(ee_u16)0x39bf,(ee_u16)0xe5a4,(ee_u16)0x8e3a,(ee_u16)0x8d84};
@@ -325,15 +340,15 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 		ee_printf("Correct operation validated. See README.md for run and reporting rules.\n");
 #if HAS_FLOAT
 		if (known_id==3) {
-			ee_printf("CoreMark 1.0 : %f / %s %s",default_num_contexts*results[0].iterations/time_in_secs(total_time),COMPILER_VERSION,COMPILER_FLAGS);
+			ee_printf("CoreMark 1.0 : %.2f :: %.2f / MHz at %d MHz core frequency :: compiler %s %s",default_num_contexts*results[0].iterations/time_in_secs(total_time), default_num_contexts*results[0].iterations/time_in_secs(total_time) / CPU_FREQ, CPU_FREQ, COMPILER_VERSION, COMPILER_FLAGS);
 #if defined(MEM_LOCATION) && !defined(MEM_LOCATION_UNSPEC)
-			ee_printf(" / %s",MEM_LOCATION);
+			ee_printf(" :: memory location %s",MEM_LOCATION);
 #else
-			ee_printf(" / %s",mem_name[MEM_METHOD]);
+			ee_printf(" :: %s",mem_name[MEM_METHOD]);
 #endif
 
 #if (MULTITHREAD>1)
-			ee_printf(" / %d:%s",default_num_contexts,PARALLEL_METHOD);
+			ee_printf(" :: cores used: %d :: thread method: %s",default_num_contexts,PARALLEL_METHOD);
 #endif
 			ee_printf("\n");
 		}

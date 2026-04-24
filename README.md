@@ -8,18 +8,20 @@ See [EEMBC](https://github.com/eembc/coremark) for more details.
 ## Current results
 Between parenthesis result with -O0 for comparaison, otherwise -O3 is used to compile Coremark.
 
-| Processor       | Freq (MHz) | CoreMark     | CoreMark/MHz |
-| :-------------- | :--------- | :----------- | ------------ |
-| ESP8266         | 80         | 191          | 2.375        |
-| ESP32 (2 cores) | 160        | 665.9        | **4.16**     |
-|                 | 240        | **999.2**    | **4.16**     |
-| ESP32 (1 core)  | 80         | 165.9        | 2.07         |
-|                 | 160        | 330.9 (78.1) | 2.07 (0.49)  |
-|                 | 240        | 494.6        | 2.06         |
-| ESP32 S2        | 80         | 157,5        | 1.97         |
-|                 | 160        | 315.2        | 1.97         |
-|                 | 240        | 472.8        | 1.97         |
-| ...             | ...        | ...          | ...          |
+| Processor          | Freq (MHz) | CoreMark     | CoreMark/MHz |
+|:-------------------|:-----------|:-------------|--------------|
+| ESP8266            | 80         | 191          | 2.375        |
+| ESP32 (2 cores)    | 160        | 665.9        | **4.16**     |
+|                    | 240        | **999.2**    | **4.16**     |
+| ESP32 (1 core)     | 80         | 165.9        | 2.07         |
+|                    | 160        | 330.9 (78.1) | 2.07 (0.49)  |
+|                    | 240        | 494.6        | 2.06         |
+| ESP32 S2           | 80         | 157,5        | 1.97         |
+|                    | 160        | 315.2        | 1.97         |
+|                    | 240        | 472.8        | 1.97         |
+| ESP32 P4 (1 core)  | 360        |              |              |
+| ESP32 P4 (2 cores) | 360        | 2100.8       | 5.84         |
+| ...                | ...        | ...          | ...          |
 
 (larger numbers are better)
 
@@ -76,15 +78,15 @@ Ctrl-a + k then y to exit screen
 
 You have to wait about 20 to 30s to get the results.
 
-## Result you should get with default settings (numbers may change)
+## Result you should get with 2 core settings (numbers may change)
 ```
 2K performance run parameters for coremark.
 CoreMark Size    : 666
-Total ticks      : 18020
-Total time (secs): 18.020000
-Iterations/Sec   : 665.926748
-Iterations       : 12000
-Compiler version : GCC8.4.0
+Total ticks      : 19040000
+Total time (secs): 19.040000
+Iterations/Sec   : 2100.840336
+Iterations       : 40000
+Compiler version : GCC14.2.0
 Compiler flags   : -O3
 Parallel FreeRTOS : 2
 Memory location  : DRAM
@@ -95,8 +97,8 @@ seedcrc          : 0xe9f5
 [1]crcmatrix     : 0x1fd7
 [0]crcstate      : 0x8e3a
 [1]crcstate      : 0x8e3a
-[0]crcfinal      : 0xa14c
-[1]crcfinal      : 0xa14c
+[0]crcfinal      : 0x382f
+[1]crcfinal      : 0x382f
 Correct operation validated. See README.md for run and reporting rules.
-CoreMark 1.0 : 665.926748 / GCC8.4.0 -O3 / DRAM / 2:FreeRTOS
+CoreMark 1.0 : 2100.84 :: 5.84 / MHz at 360 MHz core frequency :: compiler GCC14.2.0 -O3 :: memory location DRAM :: cores used: 2 :: thread method: FreeRTOS
 ```

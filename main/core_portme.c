@@ -165,7 +165,7 @@ ee_u8 core_start_parallel(core_results *res) {
 }
 ee_u8 core_stop_parallel(core_results *res) {
 	// Wait for task to be finished
-	xEventGroupWaitBits(*(res->port.event_group), res->port.event_bit, false, false, 120000 / portTICK_RATE_MS);
+	xEventGroupWaitBits(*(res->port.event_group), res->port.event_bit, false, false, 120000 / portTICK_PERIOD_MS);
 
 	return 1;
 }
